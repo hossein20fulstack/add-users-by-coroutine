@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication5252525.databinding.ActivityMainBinding
 import com.example.room.db.DBhandler
 import com.example.room.db.model.UserEntitly
@@ -14,6 +15,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.log
 
@@ -32,33 +34,34 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val db = DBhandler.getDatabase(this)
-        val disposable = CompositeDisposable()
         binding.btncreate.setOnClickListener {
-            Thread {
-                db.userDao().insertUser(
-                    UserEntitly(0, "st1", "family1", "1111"),
-                    UserEntitly(0, "st2", "family2", "22"),
-                    UserEntitly(0, "st3", "family3", "3333"),
-                    UserEntitly(0, "st4", "family4", "444"),
-                )
 
-            }.start()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    db.userDao().insertUser(
+                        UserEntitly(0, "st1", "family1", "1111")
+
+                    )
+                }
+            }
         }
 
         binding.btnPrint.setOnClickListener {
-            var text = ""
-            val dispose = db.userDao().getUser
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ user ->
-                    user.forEach {
-                        text += "$it.name\n\n"
-                    }
-                    binding.txtid.text = "$text"
-                }) {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val users = db.userDao().getUser
 
+                    withContext(Dispatchers.Main) {
+                        var text = ""
+                        users.collect { userlist ->
+                            userlist.forEach {
+                                text += "$it\n\n"
+                            }
+                        binding.txtid.text = text
+                        }
+                    }
                 }
-            disposable.add(dispose)
+            }
 
         }
 

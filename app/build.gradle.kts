@@ -66,7 +66,5 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.2")
     // برای تست:
     testImplementation("androidx.room:room-testing:$room_version")
-    val  lifecycle_version = "2.0.0"
-    implementation ("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
-    implementation ("androidx.lifecycle:lifecycle-livedata:$lifecycle_version")
+
 }

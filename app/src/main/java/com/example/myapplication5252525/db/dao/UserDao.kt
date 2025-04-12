@@ -15,6 +15,6 @@ interface UserDao {
     fun insertUser(vararg user: UserEntitly)
 
     @get:Query("SELECT * FROM ${DBhandler.USER_TABLE}")
-    val getUser: Flowable<List<UserEntitly>>
+    val getUser: Flow<List<UserEntitly>>
 }
 
