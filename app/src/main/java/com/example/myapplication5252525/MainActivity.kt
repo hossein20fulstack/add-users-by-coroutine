@@ -34,9 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val db = DBhandler.getDatabase(this)
+        var text = ""
         binding.btncreate.setOnClickListener {
 
             lifecycleScope.launch {
+                text = ""
                 withContext(Dispatchers.IO) {
                     db.userDao().insertUser(
                         UserEntitly(0, "st1", "family1", "1111")
@@ -45,19 +47,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        binding.btnclear.setOnClickListener {
+            binding.txtid.text=""
+        }
         binding.btnPrint.setOnClickListener {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
                     val users = db.userDao().getUser
-
                     withContext(Dispatchers.Main) {
-                        var text = ""
                         users.collect { userlist ->
+                            text = ""
                             userlist.forEach {
                                 text += "$it\n\n"
                             }
-                        binding.txtid.text = text
+                            binding.txtid.text = text
                         }
                     }
                 }
