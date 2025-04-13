@@ -40,15 +40,29 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 text = ""
                 withContext(Dispatchers.IO) {
-                    db.userDao().insertUser(
-                        UserEntitly(0, "st1", "family1", "1111")
+                    val res =
 
-                    )
+//                        db.userDao().insertUser(UserEntitly(0,"St1","Family1","00000"))
+
+
+//                        db.userDao().deleteallusers()
+
+//                        db.userDao().delete(UserEntitly(2,"st1","","")
+                        //////////////////
+//                        db.userDao().update(
+//                        UserEntitly(1, "Upddddatename", "UpdateFamily", "1111")
+
+//                    )
+
+                    withContext(Dispatchers.Main){
+
+//                        Toast.makeText(this@MainActivity, res.toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
         binding.btnclear.setOnClickListener {
-            binding.txtid.text=""
+            binding.txtid.text = ""
         }
         binding.btnPrint.setOnClickListener {
             lifecycleScope.launch {
@@ -70,4 +84,5 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 }
